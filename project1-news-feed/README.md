@@ -51,7 +51,7 @@
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━
-<img width="1885" height="1602" alt="image" src="https://github.com/user-attachments/assets/9c8be52f-512a-4c3f-b761-1d49fb8264d6" />
+![飞书资讯推送效果](./assets/feishu_news.png)
 ━━━━━━━━━━━━━━━━━━━━━━
 ```
 
