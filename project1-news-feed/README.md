@@ -49,7 +49,7 @@
 
 ## 📊 运行效果
 
-![飞书资讯推送效果](../../assets/feishu_news.png)
+![飞书资讯推送效果](https://raw.githubusercontent.com/txk1228/xiaoke-portfolio/main/assets/feishu_news.png)
 
 ## 🔧 扩展方向
 
