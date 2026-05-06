@@ -69,3 +69,4 @@ tar -zxvf project_20260506_151342.tar.gz
 cd project1-news-feed
 pip install -r requirements.txt
 python main.py
+
