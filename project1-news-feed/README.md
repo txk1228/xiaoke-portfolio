@@ -58,3 +58,14 @@
 - 知识库沉淀: 推送内容自动存入向量知识库，支持语义检索和问答
 - 个性化订阅: 支持用户输入兴趣标签，按需推送
 - 多语言支持: 扩展英文资讯源，大模型翻译后推送
+
+### 📦 项目源码下载
+项目完整代码已打包，点击下载：
+[project_20260506_151342.tar.gz](./project_20260506_151342.tar.gz)
+
+下载后解压，运行方式：
+```bash
+tar -zxvf project_20260506_151342.tar.gz
+cd project1-news-feed
+pip install -r requirements.txt
+python main.py
