@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在线电子黑板</title>
+<style>
+:root {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); height: 100vh; display: flex; flex-direction: column; user-select: none; }
+
+/* Toolbar */
+.toolbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 8px 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 10; box-shadow: var(--shadow); }
+.tool-group { display: flex; align-items: center; gap: 4px; padding: 0 8px; }
+.tool-group:not(:last-child) { border-right: 1px solid var(--border); }
+.tool-btn { width: 36px; height: 36px; border: 2px solid transparent; border-radius: 6px; background: transparent; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: var(--text); }
+.tool-btn:hover { background: #f1f5f9; }
+.tool-btn.active { border-color: #3b82f6; background: #eff6ff; }
+.tool-btn.eraser-active { border-color: #f59e0b; background: #fffbeb; }
+
+input[type="color"] { width: 32px; height: 32px; border: none; border-radius: 6px; cursor: pointer; padding: 0; background: none; }
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch { border-radius: 6px; border: 1px solid var(--border); }
+
+input[type="range"] { width: 72px; cursor: pointer; }
+.size-label { font-size: 12px; color: #64748b; min-width: 28px; text-align: center; }
+
+.btn-action { padding: 6px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); cursor: pointer; font-size: 13px; transition: all 0.15s; color: var(--text); white-space: nowrap; }
+.btn-action:hover { background: #f1f5f9; }
+.btn-action.primary { background: #3b82f6; color: #fff; border-color: transparent; }
+.btn-action.primary:hover { opacity: 0.9; }
+.btn-action.danger { color: #ef4444; }
+
+/* Canvas */
+.canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 16px; overflow: auto; }
+canvas { background: #ffffff; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); cursor: crosshair; max-width: 100%; max-height: 100%; }
+
+.hint { font-size: 12px; color: #94a3b8; text-align: center; padding: 8px; }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div class="tool-group">
+    <button class="tool-btn active" id="btn-brush" onclick="setTool('brush')" title="画笔">✏️</button>
+    <button class="tool-btn" id="btn-eraser" onclick="setTool('eraser')" title="橡皮">🧹</button>
+  </div>
+  <div class="tool-group">
+    <input type="color" id="color-picker" value="#1e293b" onchange="onColorChange()" title="颜色">
+    <input type="range" id="thickness" min="1" max="20" value="3" oninput="onThicknessChange()" title="粗细">
+    <span class="size-label" id="size-label">3px</span>
+  </div>
+  <div class="tool-group">
+    <button class="btn-action" onclick="undo()" title="撤销 (Ctrl+Z)">↩ 撤销</button>
+  </div>
+  <div class="tool-group">
+    <button class="btn-action" onclick="clearCanvas()" title="清空画布">清空</button>
+    <button class="btn-action primary" onclick="exportPNG()" title="导出PNG">⬇ 导出PNG</button>
+  </div>
+</div>
+
+<div class="canvas-wrap">
+  <canvas id="canvas"></canvas>
+</div>
+<div class="hint">提示：选择画笔/橡皮 → 调整颜色粗细 → 在画布上绘制 | 快捷键 Ctrl+Z 撤销</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const W = 800, H = 500;
+let dpr = window.devicePixelRatio || 1;
+
+function resize() {
+  const wrap = canvas.parentElement;
+  const maxW = wrap.clientWidth - 32;
+  const maxH = wrap.clientHeight - 32;
+  const scale = Math.min(maxW / W, maxH / H);
+  canvas.style.width = W * scale + 'px';
+  canvas.style.height = H * scale + 'px';
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+  replayDraw();
+}
+
+let tool = 'brush';
+let color = '#1e293b';
+let thickness = 3;
+let isDrawing = false;
+let history = [];
+let currentPath = [];
+
+function saveSnapshot() {
+  // We store draw commands, not pixel data, to maintain quality on resize
+}
+
+canvas.addEventListener('pointerdown', e => {
+  isDrawing = true;
+  const pt = getPoint(e);
+  currentPath = [{ x: pt.x, y: pt.y }];
+  ctx.beginPath();
+  ctx.moveTo(pt.x, pt.y);
+});
+
+canvas.addEventListener('pointermove', e => {
+  if (!isDrawing) return;
+  const pt = getPoint(e);
+  currentPath.push({ x: pt.x, y: pt.y });
+  ctx.lineTo(pt.x, pt.y);
+  ctx.strokeStyle = tool === 'eraser' ? '#ffffff' : color;
+  ctx.lineWidth = tool === 'eraser' ? thickness * 3 : thickness;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(pt.x, pt.y);
+});
+
+canvas.addEventListener('pointerup', () => {
+  if (!isDrawing) return;
+  isDrawing = false;
+  if (currentPath.length > 0) {
+    history.push({
+      tool,
+      color: tool === 'eraser' ? '#ffffff' : color,
+      thickness: tool === 'eraser' ? thickness * 3 : thickness,
+      path: currentPath
+    });
+    // Limit history
+    if (history.length > 50) history.shift();
+  }
+  currentPath = [];
+});
+
+canvas.addEventListener('pointerleave', () => { isDrawing = false; });
+
+function getPoint(e) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (e.clientX - rect.left) * (W / rect.width),
+    y: (e.clientY - rect.top) * (H / rect.height)
+  };
+}
+
+function replayDraw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  history.forEach(cmd => {
+    ctx.beginPath();
+    ctx.strokeStyle = cmd.color;
+    ctx.lineWidth = cmd.thickness;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    cmd.path.forEach((pt, i) => {
+      if (i === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    });
+    ctx.stroke();
+  });
+}
+
+function undo() {
+  history.pop();
+  currentPath = [];
+  replayDraw();
+}
+
+function clearCanvas() {
+  history = [];
+  currentPath = [];
+  ctx.clearRect(0, 0, W * dpr, H * dpr);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W * dpr, H * dpr);
+}
+
+function exportPNG() {
+  const link = document.createElement('a');
+  link.download = `whiteboard-${new Date().toISOString().slice(0,10)}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function setTool(t) {
+  tool = t;
+  document.getElementById('btn-brush').classList.toggle('active', t === 'brush');
+  document.getElementById('btn-eraser').classList.toggle('eraser-active', t === 'eraser');
+  canvas.style.cursor = t === 'eraser' ? 'cell' : 'crosshair';
+}
+
+function onColorChange() {
+  color = document.getElementById('color-picker').value;
+}
+
+function onThicknessChange() {
+  thickness = parseInt(document.getElementById('thickness').value);
+  document.getElementById('size-label').textContent = thickness + 'px';
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+    e.preventDefault();
+    undo();
+  }
+});
+
+window.addEventListener('resize', resize);
+
+resize();
+replayDraw();
+</script>
+</body>
+</html>

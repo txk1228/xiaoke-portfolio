@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeetCode Hot100 刷题打卡</title>
+<style>
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --primary: #3b82f6;
+  --primary-light: #eff6ff;
+  --easy: #22c55e;
+  --easy-bg: #f0fdf4;
+  --medium: #f59e0b;
+  --medium-bg: #fffbeb;
+  --hard: #ef4444;
+  --hard-bg: #fef2f2;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+
+/* Header */
+.header { text-align: center; margin-bottom: 24px; }
+.header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.header p { color: var(--text-secondary); font-size: 14px; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--card); border-radius: var(--radius); padding: 16px; text-align: center; box-shadow: var(--shadow); }
+.stat-card .number { font-size: 28px; font-weight: 700; }
+.stat-card .label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.stat-card.easy .number { color: var(--easy); }
+.stat-card.medium .number { color: var(--medium); }
+.stat-card.hard .number { color: var(--hard); }
+.stat-card.total .number { color: var(--primary); }
+
+/* Progress bar */
+.progress-wrap { background: var(--card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); margin-bottom: 20px; }
+.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary); }
+.progress-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 5px; transition: width 0.3s ease; }
+
+/* Filters */
+.filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-input { flex: 1; min-width: 180px; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; outline: none; transition: border-color 0.2s; }
+.filter-input:focus { border-color: var(--primary); }
+.filter-select { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; background: var(--card); outline: none; cursor: pointer; }
+
+/* Problem list */
+.problem-list { display: flex; flex-direction: column; gap: 8px; }
+.problem { background: var(--card); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+.problem:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.problem.solved { border-left: 4px solid var(--easy); }
+.problem.attempted { border-left: 4px solid var(--medium); }
+.problem.unsolved { border-left: 4px solid var(--border); }
+.problem-id { font-size: 12px; color: var(--text-secondary); min-width: 48px; font-weight: 500; }
+.problem-title { flex: 1; font-size: 15px; font-weight: 500; }
+.problem-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+.tag.easy { background: var(--easy-bg); color: var(--easy); }
+.tag.medium { background: var(--medium-bg); color: var(--medium); }
+.tag.hard { background: var(--hard-bg); color: var(--hard); }
+.tag.category { background: #f1f5f9; color: #475569; }
+.status-btn { font-size: 22px; border: none; background: none; cursor: pointer; padding: 4px; border-radius: 50%; transition: transform 0.15s; }
+.status-btn:hover { transform: scale(1.2); }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--card); border-radius: var(--radius); padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+.modal h3 { margin-bottom: 12px; font-size: 18px; }
+.modal .problem-info { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
+.modal textarea { width: 100%; min-height: 80px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; resize: vertical; outline: none; }
+.modal textarea:focus { border-color: var(--primary); }
+.modal-actions { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
+.btn { padding: 8px 20px; border-radius: 8px; border: none; font-size: 14px; cursor: pointer; font-weight: 500; transition: opacity 0.15s; }
+.btn:hover { opacity: 0.85; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+.btn-danger { background: transparent; border: 1px solid var(--hard); color: var(--hard); }
+
+.empty { text-align: center; color: var(--text-secondary); padding: 40px 0; font-size: 14px; }
+
+.hint { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.problem-note { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>LeetCode Hot100 刷题打卡</h1>
+    <p>坚持每日刷题，积少成多</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card total"><div class="number" id="stat-total">0</div><div class="label">总题数</div></div>
+    <div class="stat-card easy"><div class="number" id="stat-easy">0</div><div class="label">简单</div></div>
+    <div class="stat-card medium"><div class="number" id="stat-medium">0</div><div class="label">中等</div></div>
+    <div class="stat-card hard"><div class="number" id="stat-hard">0</div><div class="label">困难</div></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-header">
+      <span>刷题进度</span>
+      <span id="progress-text">0 / 0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
+  </div>
+
+  <div class="filters">
+    <input class="filter-input" type="text" id="search" placeholder="搜索题号或题目名称...">
+    <select class="filter-select" id="filter-difficulty">
+      <option value="all">全部难度</option>
+      <option value="Easy">简单</option>
+      <option value="Medium">中等</option>
+      <option value="Hard">困难</option>
+    </select>
+    <select class="filter-select" id="filter-status">
+      <option value="all">全部状态</option>
+      <option value="solved">已解决</option>
+      <option value="attempted">尝试中</option>
+      <option value="unsolved">未解决</option>
+    </select>
+    <select class="filter-select" id="filter-category">
+      <option value="all">全部分类</option>
+      <option value="数组">数组</option>
+      <option value="链表">链表</option>
+      <option value="字符串">字符串</option>
+      <option value="哈希表">哈希表</option>
+      <option value="双指针">双指针</option>
+      <option value="二叉树">二叉树</option>
+      <option value="动态规划">动态规划</option>
+      <option value="贪心">贪心</option>
+      <option value="回溯">回溯</option>
+      <option value="二分查找">二分查找</option>
+      <option value="栈">栈</option>
+      <option value="堆">堆</option>
+      <option value="图论">图论</option>
+      <option value="滑动窗口">滑动窗口</option>
+    </select>
+  </div>
+
+  <div class="problem-list" id="problem-list"></div>
+  <div class="empty" id="empty-msg" style="display:none">没有匹配的题目</div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">题目详情</h3>
+    <div class="problem-info" id="modal-info"></div>
+    <label style="font-size:13px;font-weight:500;">备注</label>
+    <textarea id="modal-note" placeholder="记录解题思路、坑点..."></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="btn-unsolved">未解决</button>
+      <button class="btn btn-outline" id="btn-attempted">尝试中</button>
+      <button class="btn btn-primary" id="btn-solved">已解决</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const HOT100 = [
+  { id: 1, title: '两数之和', difficulty: 'Easy', category: '数组', tags: ['哈希表'], leetcodeId: 1 },
+  { id: 2, title: '两数相加', difficulty: 'Medium', category: '链表', tags: ['链表', '数学'], leetcodeId: 2 },
+  { id: 3, title: '无重复字符的最长子串', difficulty: 'Medium', category: '字符串', tags: ['滑动窗口', '哈希表'], leetcodeId: 3 },
+  { id: 4, title: '寻找两个正序数组的中位数', difficulty: 'Hard', category: '数组', tags: ['二分查找'], leetcodeId: 4 },
+  { id: 5, title: '最长回文子串', difficulty: 'Medium', category: '字符串', tags: ['动态规划', '双指针'], leetcodeId: 5 },
+  { id: 6, title: '盛最多水的容器', difficulty: 'Medium', category: '数组', tags: ['双指针', '贪心'], leetcodeId: 11 },
+  { id: 7, title: '三数之和', difficulty: 'Medium', category: '数组', tags: ['双指针', '排序'], leetcodeId: 15 },
+  { id: 8, title: '电话号码的字母组合', difficulty: 'Medium', category: '回溯', tags: ['回溯', '字符串'], leetcodeId: 17 },
+  { id: 9, title: '删除链表的倒数第N个结点', difficulty: 'Medium', category: '链表', tags: ['双指针'], leetcodeId: 19 },
+  { id: 10, title: '有效的括号', difficulty: 'Easy', category: '栈', tags: ['栈', '字符串'], leetcodeId: 20 },
+  { id: 11, title: '合并两个有序链表', difficulty: 'Easy', category: '链表', tags: ['链表', '递归'], leetcodeId: 21 },
+  { id: 12, title: '括号生成', difficulty: 'Medium', category: '回溯', tags: ['回溯', '字符串'], leetcodeId: 22 },
+  { id: 13, title: '合并K个升序链表', difficulty: 'Hard', category: '链表', tags: ['堆', '分治'], leetcodeId: 23 },
+  { id: 14, title: '下一个排列', difficulty: 'Medium', category: '数组', tags: ['双指针'], leetcodeId: 31 },
+  { id: 15, title: '最长有效括号', difficulty: 'Hard', category: '栈', tags: ['栈', '动态规划'], leetcodeId: 32 },
+  { id: 16, title: '搜索旋转排序数组', difficulty: 'Medium', category: '二分查找', tags: ['二分查找', '数组'], leetcodeId: 33 },
+  { id: 17, title: '在排序数组中查找元素的第一个和最后一个位置', difficulty: 'Medium', category: '二分查找', tags: ['二分查找', '数组'], leetcodeId: 34 },
+  { id: 18, title: '组合总和', difficulty: 'Medium', category: '回溯', tags: ['回溯', '数组'], leetcodeId: 39 },
+  { id: 19, title: '接雨水', difficulty: 'Hard', category: '栈', tags: ['栈', '双指针', '动态规划'], leetcodeId: 42 },
+  { id: 20, title: '全排列', difficulty: 'Medium', category: '回溯', tags: ['回溯'], leetcodeId: 46 },
+  { id: 21, title: '旋转图像', difficulty: 'Medium', category: '数组', tags: ['数组', '数学'], leetcodeId: 48 },
+  { id: 22, title: '字母异位词分组', difficulty: 'Medium', category: '哈希表', tags: ['哈希表', '字符串', '排序'], leetcodeId: 49 },
+  { id: 23, title: '最大子数组和', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '分治'], leetcodeId: 53 },
+  { id: 24, title: '跳跃游戏', difficulty: 'Medium', category: '贪心', tags: ['贪心', '动态规划'], leetcodeId: 55 },
+  { id: 25, title: '合并区间', difficulty: 'Medium', category: '数组', tags: ['排序', '数组'], leetcodeId: 56 },
+  { id: 26, title: '不同路径', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '数学'], leetcodeId: 62 },
+  { id: 27, title: '最小路径和', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '数组'], leetcodeId: 64 },
+  { id: 28, title: '爬楼梯', difficulty: 'Easy', category: '动态规划', tags: ['动态规划'], leetcodeId: 70 },
+  { id: 29, title: '编辑距离', difficulty: 'Hard', category: '动态规划', tags: ['动态规划', '字符串'], leetcodeId: 72 },
+  { id: 30, title: '颜色分类', difficulty: 'Medium', category: '数组', tags: ['双指针', '排序'], leetcodeId: 75 },
+  { id: 31, title: '子集', difficulty: 'Medium', category: '回溯', tags: ['回溯', '位运算'], leetcodeId: 78 },
+  { id: 32, title: '单词搜索', difficulty: 'Medium', category: '回溯', tags: ['回溯', '二维数组'], leetcodeId: 79 },
+  { id: 33, title: '柱状图中最大的矩形', difficulty: 'Hard', category: '栈', tags: ['栈', '单调栈'], leetcodeId: 84 },
+  { id: 34, title: '二叉树的中序遍历', difficulty: 'Easy', category: '二叉树', tags: ['二叉树', '栈', '递归'], leetcodeId: 94 },
+  { id: 35, title: '验证二叉搜索树', difficulty: 'Medium', category: '二叉树', tags: ['二叉树', '递归'], leetcodeId: 98 },
+  { id: 36, title: '对称二叉树', difficulty: 'Easy', category: '二叉树', tags: ['二叉树', '递归'], leetcodeId: 101 },
+  { id: 37, title: '二叉树的层序遍历', difficulty: 'Medium', category: '二叉树', tags: ['二叉树', 'BFS'], leetcodeId: 102 },
+  { id: 38, title: '二叉树的最大深度', difficulty: 'Easy', category: '二叉树', tags: ['二叉树', '递归'], leetcodeId: 104 },
+  { id: 39, title: '从前序与中序遍历序列构造二叉树', difficulty: 'Medium', category: '二叉树', tags: ['二叉树', '分治'], leetcodeId: 105 },
+  { id: 40, title: '二叉树展开为链表', difficulty: 'Medium', category: '二叉树', tags: ['二叉树', '栈'], leetcodeId: 114 },
+  { id: 41, title: '买卖股票的最佳时机', difficulty: 'Easy', category: '贪心', tags: ['贪心', '数组'], leetcodeId: 121 },
+  { id: 42, title: '二叉树中的最大路径和', difficulty: 'Hard', category: '二叉树', tags: ['二叉树', '动态规划', '递归'], leetcodeId: 124 },
+  { id: 43, title: '最长连续序列', difficulty: 'Medium', category: '哈希表', tags: ['哈希表', '并查集'], leetcodeId: 128 },
+  { id: 44, title: '环形链表', difficulty: 'Easy', category: '链表', tags: ['链表', '双指针'], leetcodeId: 141 },
+  { id: 45, title: '环形链表 II', difficulty: 'Medium', category: '链表', tags: ['链表', '双指针'], leetcodeId: 142 },
+  { id: 46, title: 'LRU缓存', difficulty: 'Medium', category: '哈希表', tags: ['哈希表', '链表'], leetcodeId: 146 },
+  { id: 47, title: '排序链表', difficulty: 'Medium', category: '链表', tags: ['链表', '归并排序'], leetcodeId: 148 },
+  { id: 48, title: '乘积最大子数组', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '数组'], leetcodeId: 152 },
+  { id: 49, title: '最小栈', difficulty: 'Easy', category: '栈', tags: ['栈'], leetcodeId: 155 },
+  { id: 50, title: '相交链表', difficulty: 'Easy', category: '链表', tags: ['链表', '双指针', '哈希表'], leetcodeId: 160 },
+  { id: 51, title: '多数元素', difficulty: 'Easy', category: '数组', tags: ['数组', '哈希表', '分治'], leetcodeId: 169 },
+  { id: 52, title: '打家劫舍', difficulty: 'Medium', category: '动态规划', tags: ['动态规划'], leetcodeId: 198 },
+  { id: 53, title: '岛屿数量', difficulty: 'Medium', category: '图论', tags: ['DFS', 'BFS', '并查集'], leetcodeId: 200 },
+  { id: 54, title: '反转链表', difficulty: 'Easy', category: '链表', tags: ['链表', '递归'], leetcodeId: 206 },
+  { id: 55, title: '课程表', difficulty: 'Medium', category: '图论', tags: ['拓扑排序', 'DFS'], leetcodeId: 207 },
+  { id: 56, title: '实现Trie(前缀树)', difficulty: 'Medium', category: '哈希表', tags: ['字典树', '设计'], leetcodeId: 208 },
+  { id: 57, title: '数组中的第K个最大元素', difficulty: 'Medium', category: '堆', tags: ['堆', '快速选择'], leetcodeId: 215 },
+  { id: 58, title: '回文链表', difficulty: 'Easy', category: '链表', tags: ['链表', '双指针', '栈'], leetcodeId: 234 },
+  { id: 59, title: '滑动窗口最大值', difficulty: 'Hard', category: '滑动窗口', tags: ['滑动窗口', '单调队列', '堆'], leetcodeId: 239 },
+  { id: 60, title: '搜索二维矩阵 II', difficulty: 'Medium', category: '二分查找', tags: ['二分查找', '分治'], leetcodeId: 240 },
+  { id: 61, title: '移动零', difficulty: 'Easy', category: '数组', tags: ['双指针'], leetcodeId: 283 },
+  { id: 62, title: '完全平方数', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '数学', 'BFS'], leetcodeId: 279 },
+  { id: 63, title: '寻找重复数', difficulty: 'Medium', category: '数组', tags: ['双指针', '二分查找'], leetcodeId: 287 },
+  { id: 64, title: '数据流的中位数', difficulty: 'Hard', category: '堆', tags: ['堆', '设计'], leetcodeId: 295 },
+  { id: 65, title: '最长递增子序列', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '二分查找'], leetcodeId: 300 },
+  { id: 66, title: '最佳买卖股票时机含冷冻期', difficulty: 'Medium', category: '动态规划', tags: ['动态规划'], leetcodeId: 309 },
+  { id: 67, title: '零钱兑换', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', 'BFS'], leetcodeId: 322 },
+  { id: 68, title: '打家劫舍III', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '二叉树', 'DFS'], leetcodeId: 337 },
+  { id: 69, title: '前K个高频元素', difficulty: 'Medium', category: '堆', tags: ['堆', '哈希表'], leetcodeId: 347 },
+  { id: 70, title: '字符串解码', difficulty: 'Medium', category: '栈', tags: ['栈', '递归', '字符串'], leetcodeId: 394 },
+  { id: 71, title: '找到字符串中所有字母异位词', difficulty: 'Medium', category: '滑动窗口', tags: ['滑动窗口', '字符串'], leetcodeId: 438 },
+  { id: 72, title: '路径总和III', difficulty: 'Medium', category: '二叉树', tags: ['二叉树', '前缀和', 'DFS'], leetcodeId: 437 },
+  { id: 73, title: '汉明距离', difficulty: 'Easy', category: '位运算', tags: ['位运算'], leetcodeId: 461 },
+  { id: 74, title: '目标和', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '回溯'], leetcodeId: 494 },
+  { id: 75, title: '把二叉搜索树转换为累加树', difficulty: 'Medium', category: '二叉树', tags: ['二叉树', '栈'], leetcodeId: 538 },
+  { id: 76, title: '二叉树的直径', difficulty: 'Easy', category: '二叉树', tags: ['二叉树', '递归'], leetcodeId: 543 },
+  { id: 77, title: '和为K的子数组', difficulty: 'Medium', category: '哈希表', tags: ['哈希表', '前缀和'], leetcodeId: 560 },
+  { id: 78, title: '最短无序连续子数组', difficulty: 'Medium', category: '数组', tags: ['数组', '双指针', '栈'], leetcodeId: 581 },
+  { id: 79, title: '任务调度器', difficulty: 'Medium', category: '贪心', tags: ['贪心', '堆', '排序'], leetcodeId: 621 },
+  { id: 80, title: '回文子串', difficulty: 'Medium', category: '字符串', tags: ['动态规划', '字符串'], leetcodeId: 647 },
+  { id: 81, title: '每日温度', difficulty: 'Medium', category: '栈', tags: ['栈', '单调栈'], leetcodeId: 739 },
+  { id: 82, title: '除法求值', difficulty: 'Medium', category: '图论', tags: ['并查集', '图论', 'BFS'], leetcodeId: 399 },
+  { id: 83, title: '找到所有数组中消失的数字', difficulty: 'Easy', category: '数组', tags: ['数组', '哈希表'], leetcodeId: 448 },
+  { id: 84, title: '根据身高重建队列', difficulty: 'Medium', category: '贪心', tags: ['贪心', '树状数组'], leetcodeId: 406 },
+  { id: 85, title: '分割等和子集', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '背包问题'], leetcodeId: 416 },
+  { id: 86, title: '寻找旋转排序数组中的最小值', difficulty: 'Medium', category: '二分查找', tags: ['二分查找', '数组'], leetcodeId: 153 },
+  { id: 87, title: '除自身以外数组的乘积', difficulty: 'Medium', category: '数组', tags: ['数组', '前缀积'], leetcodeId: 238 },
+  { id: 88, title: '打乱数组', difficulty: 'Medium', category: '数组', tags: ['数组', 'Fisher-Yates'], leetcodeId: 384 },
+  { id: 89, title: '只出现一次的数字', difficulty: 'Easy', category: '位运算', tags: ['位运算'], leetcodeId: 136 },
+  { id: 90, title: '比特位计数', difficulty: 'Easy', category: '位运算', tags: ['位运算', '动态规划'], leetcodeId: 338 },
+  { id: 91, title: '零钱兑换II', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '背包问题'], leetcodeId: 518 },
+  { id: 92, title: '单词拆分', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '哈希表', '字符串'], leetcodeId: 139 },
+  { id: 93, title: '组合总和IV', difficulty: 'Medium', category: '动态规划', tags: ['动态规划'], leetcodeId: 377 },
+  { id: 94, title: '戳气球', difficulty: 'Hard', category: '动态规划', tags: ['动态规划', '区间DP'], leetcodeId: 312 },
+  { id: 95, title: '验证回文串', difficulty: 'Easy', category: '双指针', tags: ['双指针', '字符串'], leetcodeId: 125 },
+  { id: 96, title: '打家劫舍II', difficulty: 'Medium', category: '动态规划', tags: ['动态规划'], leetcodeId: 213 },
+  { id: 97, title: '最长公共子序列', difficulty: 'Medium', category: '动态规划', tags: ['动态规划'], leetcodeId: 1143 },
+  { id: 98, title: '最长回文子序列', difficulty: 'Medium', category: '动态规划', tags: ['动态规划', '字符串'], leetcodeId: 516 },
+  { id: 99, title: '组合总和II', difficulty: 'Medium', category: '回溯', tags: ['回溯', '数组'], leetcodeId: 40 },
+  { id: 100, title: '正则表达式匹配', difficulty: 'Hard', category: '动态规划', tags: ['动态规划', '字符串'], leetcodeId: 10 }
+];
+
+const STORAGE_KEY = 'leetcode-tracker-state';
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) { /* ignore */ }
+  return {};
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function getStatus(problemId) {
+  return state[problemId]?.status || 'unsolved';
+}
+
+function getNote(problemId) {
+  return state[problemId]?.note || '';
+}
+
+function setStatus(problemId, status, note) {
+  state[problemId] = { status, note: note ?? getNote(problemId), timestamp: Date.now() };
+  saveState();
+  render();
+}
+
+function getStats() {
+  let total = HOT100.length, easy = 0, medium = 0, hard = 0, solved = 0;
+  HOT100.forEach(p => {
+    if (getStatus(p.id) === 'solved') {
+      solved++;
+      if (p.difficulty === 'Easy') easy++;
+      else if (p.difficulty === 'Medium') medium++;
+      else hard++;
+    }
+  });
+  return { total, solved, easy, medium, hard, allEasy: HOT100.filter(p => p.difficulty === 'Easy').length, allMedium: HOT100.filter(p => p.difficulty === 'Medium').length, allHard: HOT100.filter(p => p.difficulty === 'Hard').length };
+}
+
+function render() {
+  const stats = getStats();
+  document.getElementById('stat-total').textContent = stats.total;
+  document.getElementById('stat-easy').textContent = `${stats.easy}/${stats.allEasy}`;
+  document.getElementById('stat-medium').textContent = `${stats.medium}/${stats.allMedium}`;
+  document.getElementById('stat-hard').textContent = `${stats.hard}/${stats.allHard}`;
+  document.getElementById('progress-text').textContent = `${stats.solved} / ${stats.total}`;
+  document.getElementById('progress-fill').style.width = `${(stats.solved / stats.total) * 100}%`;
+
+  const search = (document.getElementById('search').value || '').toLowerCase();
+  const difficulty = document.getElementById('filter-difficulty').value;
+  const status = document.getElementById('filter-status').value;
+  const category = document.getElementById('filter-category').value;
+
+  let filtered = HOT100;
+  if (search) {
+    filtered = filtered.filter(p =>
+      p.title.toLowerCase().includes(search) ||
+      String(p.leetcodeId).includes(search) ||
+      p.tags.some(t => t.toLowerCase().includes(search))
+    );
+  }
+  if (difficulty !== 'all') filtered = filtered.filter(p => p.difficulty === difficulty);
+  if (status !== 'all') filtered = filtered.filter(p => getStatus(p.id) === status);
+  if (category !== 'all') filtered = filtered.filter(p => p.category === category);
+
+  const list = document.getElementById('problem-list');
+  const empty = document.getElementById('empty-msg');
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    list.innerHTML = filtered.map(p => {
+      const s = getStatus(p.id);
+      const statusIcon = s === 'solved' ? '✅' : s === 'attempted' ? '🔄' : '○';
+      const note = getNote(p.id);
+      return `<div class="problem ${s}" onclick="openModal(${p.id})">
+        <span class="problem-id">#${p.leetcodeId}</span>
+        <span class="problem-title">${p.title}</span>
+        <span class="problem-tags">
+          <span class="tag category">${p.category}</span>
+          <span class="tag ${p.difficulty.toLowerCase()}">${p.difficulty === 'Easy' ? '简单' : p.difficulty === 'Medium' ? '中等' : '困难'}</span>
+          ${note ? '<span class="problem-note">📝</span>' : ''}
+        </span>
+        <button class="status-btn" onclick="event.stopPropagation(); cycleStatus(${p.id})" title="切换状态">${statusIcon}</button>
+      </div>`;
+    }).join('');
+  }
+}
+
+function cycleStatus(id) {
+  const current = getStatus(id);
+  const next = current === 'unsolved' ? 'solved' : current === 'solved' ? 'attempted' : 'unsolved';
+  setStatus(id, next);
+}
+
+let currentProblemId = null;
+
+function openModal(id) {
+  currentProblemId = id;
+  const p = HOT100.find(x => x.id === id);
+  document.getElementById('modal-title').textContent = `#${p.leetcodeId} ${p.title}`;
+  document.getElementById('modal-info').innerHTML = `
+    <span class="tag ${p.difficulty.toLowerCase()}">${p.difficulty === 'Easy' ? '简单' : p.difficulty === 'Medium' ? '中等' : '困难'}</span>
+    <span class="tag category">${p.category}</span>
+    ${p.tags.map(t => `<span class="tag category">${t}</span>`).join(' ')}
+    <a href="https://leetcode.cn/problems/${p.title}/" target="_blank" style="margin-left:8px;font-size:12px;color:var(--primary)">🔗 打开题目</a>
+  `;
+  document.getElementById('modal-note').value = getNote(id);
+  document.getElementById('modal').classList.add('active');
+}
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.getElementById('btn-solved').addEventListener('click', () => {
+  if (currentProblemId) setStatus(currentProblemId, 'solved', document.getElementById('modal-note').value);
+  closeModal();
+});
+document.getElementById('btn-attempted').addEventListener('click', () => {
+  if (currentProblemId) setStatus(currentProblemId, 'attempted', document.getElementById('modal-note').value);
+  closeModal();
+});
+document.getElementById('btn-unsolved').addEventListener('click', () => {
+  if (currentProblemId) setStatus(currentProblemId, 'unsolved', '');
+  closeModal();
+});
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  currentProblemId = null;
+}
+
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('filter-difficulty').addEventListener('change', render);
+document.getElementById('filter-status').addEventListener('change', render);
+document.getElementById('filter-category').addEventListener('change', render);
+
+render();
+</script>
+</body>
+</html>
