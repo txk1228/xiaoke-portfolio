@@ -57,6 +57,14 @@
 - **技术**：HTML5 Canvas + Pointer Events + AI辅助开发
 - **成果**：可直接部署运行，高DPI屏幕清晰渲染
 
+### 5. 科技日报咨询智能体
+[→ 查看项目详情](./projects/consulting-agent/README.md)
+
+- **功能**：每日定时自动抓取AI/自动驾驶行业资讯并推送至飞书群，支持群内问答交互
+- **亮点**：内置定时触发器，部署即运行，无需手动开启工作流；Agent模式自主决策搜索+推送全流程
+- **技术**：Python + LangGraph Agent + APScheduler + 豆包大模型 + Coze
+- **成果**：每日 7:30 准时自动推送，已稳定运行
+
 ---
 
 ## 📬 联系方式
