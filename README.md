@@ -11,9 +11,9 @@
 
 ## 关于我
 专注于机器人系统的高精度控制与动力学建模，具备**扎实的控制理论功底**与**工程落地能力**：
-- 科研方向：预设性能控制、容错控制，以第一作者发表IEEE TIE（SCI顶刊）论文1篇，EI会议论文2篇；
-- 工程实践：独立完成7自由度机械臂静力学/动力学参数辨识全流程仿真，复现并分析自适应柔顺控制策略，熟悉基于模型的力控前馈与补偿方案；
-- 工具链：熟练使用Python/C++、Pinocchio、MATLAB/Simulink、ROS，掌握动力学建模、系统辨识、鲁棒估计算法的实现与调试。
+- 科研方向：预设性能控制、容错控制，以第一作者发表 IEEE TIE（SCI 顶刊）论文 1 篇，EI 会议论文 2 篇；
+- 工程实践：独立完成 7 自由度机械臂静力学/动力学参数辨识全流程仿真，复现并分析自适应柔顺控制策略，熟悉基于模型的力控前馈与补偿方案；
+- 工具链：熟练使用 Python/C++、Pinocchio、MATLAB/Simulink、ROS，掌握动力学建模、系统辨识、鲁棒估计算法的实现与调试。
 
 ---
 
@@ -31,10 +31,12 @@
 按岗位匹配度与硬核程度排序，优先展示机器人与控制方向成果。
 
 ### 一、科研成果（理论功底）
-| 产出 | 方向 | 核心内容 |
-| :--- | :--- | :--- |
-| **IEEE Transactions on Industrial Electronics（SCI顶刊）** | 容错预设性能控制 | 针对块三角结构系统，设计传感器故障下的容错控制策略，保证系统暂态与稳态性能约束 |
-| **EI会议论文 × 2** | 预设性能控制 | 1. 欧拉-拉格朗日系统的漏斗控制；2. 含执行器故障的压气机系统预设性能控制 |
+
+| # | Paper | Venue |
+| :---: | :--- | :--- |
+| 1 | X. K. Tong, J. X. Zhang and T. Y. Chai, **"Fault-Tolerant Prescribed Performance Control of Block-Triangular Systems with Sensor Faults"** | *IEEE Transactions on Industrial Electronics* (SCI), **Published**, 2026 |
+| 2 | X. K. Tong, J. X. Zhang, **"Funnel Control of Euler-Lagrange Systems With Independent Control Gains"** | IAI, EI |
+| 3 | X. K. Tong, J. X. Zhang, **"Low-Complexity Prescribed Performance Control of Jet Engine Compressors With Actuator Failures"** | ICAIS & ISAS, EI |
 
 > 依托非线性控制理论积累，聚焦机器人系统的高精度、高鲁棒性控制问题，支撑工程端的力控与辨识算法设计。
 
