@@ -1,119 +1,102 @@
-# Jessie · 仝小可
+# 仝小可 / Jessie
+**控制科学与工程硕士 | 机器人力控与动力学方向**
+> 预设性能控制 / 容错控制 / 动力学参数辨识 / 柔顺交互控制
 
-东北大学 · 控制科学与工程（研二）  
-方向：**机器人 / 力控与参数辨识 · 预设性能与容错控制**  
-GitHub：[txk1228](https://github.com/txk1228)
+📍 东北大学 · 控制科学与工程（研二）  
+📧 邮箱：3238074253@qq.com  
+🔗 GitHub：[txk1228](https://github.com/txk1228)  
+📑 IEEE Xplore：[作者主页](https://ieeexplore.ieee.org/author/358665586003614)
 
 ---
 
 ## 关于我
-
-- 科研：预设性能控制、容错控制；EI 论文 2 篇，**IEEE Transactions on Industrial Electronics (SCI)** 论文已接收  
-- 工程：七自由度机械臂动力学 / 静力学参数辨识仿真（Pinocchio）；开源 Adaptive Compliance Policy 训练复现与迁移分析  
-- 工具：Python / C++、控制系统仿真、Git；能用 AI 辅助加速工程落地，关键结论自行确认  
+专注于机器人系统的高精度控制与动力学建模，具备**扎实的控制理论功底**与**工程落地能力**：
+- 科研方向：预设性能控制、容错控制，以第一作者发表IEEE TIE（SCI顶刊）论文1篇，EI会议论文2篇；
+- 工程实践：独立完成7自由度机械臂静力学/动力学参数辨识全流程仿真，复现并分析自适应柔顺控制策略，熟悉基于模型的力控前馈与补偿方案；
+- 工具链：熟练使用Python/C++、Pinocchio、MATLAB/Simulink、ROS，掌握动力学建模、系统辨识、鲁棒估计算法的实现与调试。
 
 ---
 
-## 技术栈
-
-| 类别 | 内容 |
+## 🛠 技术栈
+| 分类 | 核心内容 |
 | :--- | :--- |
-| 控制与机器人 | PID / LQR / MPC / 预设性能控制 / 容错控制；动力学·静力学参数辨识；重力补偿与力矩前馈基础 |
-| 建模与实现 | Pinocchio、URDF、MATLAB/Simulink；系统辨识；Python / C++ |
-| 学习与工程 | PyTorch 训练排障、Diffusion / 模仿学习接口理解；自动化工作流（Coze / 飞书） |
-| 前端与其他 | HTML/CSS/JS、微信小程序（拓展项目） |
+| **核心控制算法** | 预设性能控制 / 容错控制 / 阻抗-导纳控制 / 计算力矩控制 / PID / LQR / MPC |
+| **机器人建模与辨识** | 牛顿-欧拉动力学 / 拉格朗日建模 / 基参数辨识 / 重力与摩擦补偿 / Pinocchio / URDF |
+| **工程实现工具** | Python / C++ / Eigen / MATLAB/Simulink / ROS / Git / cvxpy优化求解 |
+| **拓展能力** | PyTorch深度学习基础 / 扩散策略与模仿学习 / 自动化工作流搭建 |
 
 ---
 
-## 作品集
+## 📂 核心作品集
+按岗位匹配度与硬核程度排序，优先展示机器人与控制方向成果。
 
-> 排序依据：**岗位相关性（控制/机器人）→ 理论或算法深度 → 可验证产出（论文/仓库/可运行演示）**。  
-> 同层内按「硬核程度」排列。
+### 一、科研成果（理论功底）
+| 产出 | 方向 | 核心内容 |
+| :--- | :--- | :--- |
+| **IEEE Transactions on Industrial Electronics（SCI顶刊）** | 容错预设性能控制 | 针对块三角结构系统，设计传感器故障下的容错控制策略，保证系统暂态与稳态性能约束 |
+| **EI会议论文 × 2** | 预设性能控制 | 1. 欧拉-拉格朗日系统的漏斗控制；2. 含执行器故障的压气机系统预设性能控制 |
 
-### A. 科研
-https://ieeexplore.ieee.org/author/358665586003614
-| 产出 | 说明 |
-| :--- | :--- |
-| **IEEE TIE（SCI）** | 块三角结构系统传感器故障下的容错预设性能控制 |
-| **EI × 2** | 欧拉–拉格朗日系统漏斗控制；含执行器故障的压气机预设性能控制 |
-
-论文与证明细节以正式出版物为准；本站侧重工程与开源作品展示。
+> 依托非线性控制理论积累，聚焦机器人系统的高精度、高鲁棒性控制问题，支撑工程端的力控与辨识算法设计。
 
 ---
 
-### B. 机器人 / 控制算法（核心工程）
+### 二、机器人控制工程（核心项目）
+#### 1. 7自由度机械臂静力学/动力学参数辨识仿真
+**仓库**：[arm-param-identification](https://github.com/txk1228/arm-param-identification)  
+**标签**：动力学建模 / 系统辨识 / 鲁棒估计 / Pinocchio
 
-#### 1. 七自由度机械臂动力学 / 静力学参数辨识（仿真）
+**项目背景**：
+基于模型的高精度力控高度依赖准确的动力学参数，针对URDF标称参数与实际存在偏差、测量数据含噪声与异常点的问题，搭建了一套完整的鲁棒参数辨识仿真框架。
 
-[仓库 →](https://github.com/txk1228/arm-param-identification) · [简介](./projects/arm-param-id/README.md)
+**核心工作**：
+- 基于牛顿-欧拉递推（RNEA）构造重力与动力学回归矩阵，采用带列主元QR分解提取基参数，消除参数冗余，参数维度压缩40%；
+- 实现三种辨识求解策略：普通最小二乘（OLS）、Huber加权迭代重加权最小二乘（IRLS）、双层鲁棒白化加权最小二乘（Robust-WLS）；
+- 设计傅里叶级数激励轨迹，保证参数充分激励；加入伪惯量矩阵正定性半定规划（SDP）约束，确保辨识结果物理可实现；
+- 支持高斯噪声、异方差噪声、异常点注入，全面验证算法鲁棒性。
 
-- **内容**：\(τ=Yπ\) 回归建模；RNEA 数值重力回归 / JointTorqueRegressor；QR 基参数；OLS / Huber / 白化 WLS；傅里叶与 cosine 激励；轨迹碰撞回放  
-- **价值**：直接服务重力补偿与力矩前馈，与力控 / 位控岗位强相关  
-- **说明**：开源仓库为教学用 demo 臂仿真；不包含任何公司专有 URDF/CAD  
+**量化成果**：
+- 在0.05N·m高斯白噪声+5%极端异常点的工况下，扭矩预测RMS误差<0.01N·m；
+- 硬阈值异常点剔除准确率达98%以上，Huber加权有效降低离群点对辨识结果的干扰。
 
-#### 2. Adaptive Compliance Policy（开源）训练复现与迁移分析
+> 项目成果可直接对接计算力矩控制、重力补偿、零力拖动等力控场景，为高精度柔顺交互提供模型基础。
 
-[仓库 →](https://github.com/txk1228/ACP-repo) · [简介](./projects/acp-repro/README.md)
+#### 2. Adaptive Compliance Policy 训练复现与迁移分析
+**仓库**：[ACP-repo](https://github.com/txk1228/ACP-repo)  
+**标签**：柔顺控制 / 扩散策略 / 学习型力控
 
-- **内容**：官方接触操控数据上复现 Diffusion Policy / ACP 训练链路；梳理「观测 → 策略 → 位姿/刚度设定 → 底层柔顺控制」  
-- **价值**：理解学习策略与传统力控接口的边界  
-- **边界**：未做真机部署；用于学习与迁移条件分析  
+**项目背景**：
+探索传统基于模型的力控与学习型柔顺控制的结合边界，复现基于扩散策略的自适应柔顺控制方案，分析其在接触操控任务中的优劣势与迁移条件。
 
----
+**核心工作**：
+- 基于官方接触操控数据集，复现Diffusion Policy到ACP的完整训练链路，梳理「观测输入→策略输出→位姿/刚度设定→底层柔顺控制」的全流程；
+- 对比学习型柔顺控制与传统阻抗/导纳控制的适用场景，总结策略迁移到新任务的核心约束条件。
 
-### C. 工程自动化与智能体（工具链）
-
-> `news-feed` 与 `consulting-agent` 同属「科技资讯自动抓取 + 摘要 + 飞书推送」族谱；下面按能力完整度列出。
-
-#### 3. 科技日报咨询智能体
-
-[详情 →](./projects/consulting-agent/README.md)
-
-- Agent 模式检索 + 定时推送飞书；覆盖 AI / 自动驾驶资讯  
-- 技术：Python · LangGraph · APScheduler · 大模型 · Coze  
-
-#### 4. 科技行业资讯推送工作流
-
-[详情 →](./projects/news-feed/README.md) · 相关仓库：[daily-news-bot](https://github.com/txk1228/daily-news-bot)
-
-- 低代码 / 工作流编排实现定时抓取、摘要与多渠道推送  
-
-#### 5. 体脂健康管家
-
-[详情 →](./projects/tizhi-health/README.md)
-
-- 截图识别录入、趋势分析与建议；Taro 小程序 + NestJS（拓展全栈能力）  
+**核心结论**：
+学习型策略在非结构化接触场景中具备自适应优势，但稳态精度与可解释性弱于基于模型的力控方案，二者结合是未来落地方向。
 
 ---
 
-### D. 前端练习与工具站（展示用）
+### 三、工程工具与拓展项目
+#### 1. 科技资讯智能推送系统
+- 基于LangGraph+APScheduler实现科技资讯自动抓取、大模型摘要、定时飞书推送，覆盖AI、自动驾驶领域；
+- 低代码工作流版本支持多渠道分发，提升信息获取效率。
 
-#### 6. LeetCode Hot100 刷题打卡
-
-[源码](./projects/leetcode-tracker/) · [在线预览](https://txk1228.github.io/xiaoke-portfolio/projects/leetcode-tracker/)
-
-- 纯前端进度追踪与本地持久化  
-
-#### 7. 在线电子黑板
-
-[源码](./projects/whiteboard/) · [在线预览](https://txk1228.github.io/xiaoke-portfolio/projects/whiteboard/)
-
-- Canvas 画笔 / 橡皮 / 撤销 / 导出 PNG  
+#### 2. 前端与工具类项目
+- LeetCode Hot100 刷题打卡工具：纯前端实现，支持进度追踪与本地持久化
+- 在线电子黑板：Canvas实现画笔、橡皮、撤销、导出功能
 
 ---
 
-## 仓库索引
-
-| 仓库 | 角色 |
-| :--- | :--- |
-| [xiaoke-portfolio](https://github.com/txk1228/xiaoke-portfolio) | 本作品集（GitHub Pages） |
-| [arm-param-identification](https://github.com/txk1228/arm-param-identification) | 机械臂参数辨识仿真 |
-| [ACP-repo](https://github.com/txk1228/ACP-repo) | ACP / Diffusion Policy 复现笔记与脚本 |
-| [daily-news-bot](https://github.com/txk1228/daily-news-bot) | 资讯推送相关代码 |
+## 📦 仓库索引
+| 仓库名称 | 角色 | 核心技术 | 状态 |
+| :--- | :--- | :--- | :--- |
+| xiaoke-portfolio | 本作品集主页 | GitHub Pages | ✅ 已完成 |
+| arm-param-identification | 机械臂参数辨识仿真 | Pinocchio / 系统辨识 / Python | ✅ 已完成 |
+| ACP-repo | 自适应柔顺策略复现 | Diffusion Policy / 力控 | ✅ 已完成 |
+| daily-news-bot | 资讯推送工具 | Python / 大模型 / 飞书 | ✅ 已完成 |
 
 ---
 
-## 联系方式
-
-- 邮箱：3238074253@qq.com  
-- GitHub：[txk1228](https://github.com/txk1228)  
+## 📬 联系方式
+- 邮箱：3238074253@qq.com
+- GitHub：[txk1228](https://github.com/txk1228)
