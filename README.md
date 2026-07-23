@@ -1,75 +1,119 @@
-# 👋 你好，我是Jessie
+# Jessie · 仝小可
 
-东北大学控制科学与工程研二在读 | 自动驾驶/规控算法求职 | AI原生学习开发者
-
----
-
-## 🎯 关于我
-
-- 🎓 研究方向：预设性能与容错控制（无人机/UGV），发表2篇EI论文，1篇SCI顶刊TIE在投返修✅
-- 🚀 求职目标：自动驾驶规控/仿真算法工程师/AI
-- 🤖 开发能力：熟练使用Vibe Coding/AI编程工具，可快速完成从需求拆解到部署上线的全流程开发
+东北大学 · 控制科学与工程（研二）  
+方向：**机器人 / 力控与参数辨识 · 预设性能与容错控制**  
+GitHub：[txk1228](https://github.com/txk1228)
 
 ---
 
-## 🛠️ 技术栈
+## 关于我
 
-| 类别 | 技能 |
+- 科研：预设性能控制、容错控制；EI 论文 2 篇，**IEEE Transactions on Industrial Electronics (SCI)** 论文已接收  
+- 工程：七自由度机械臂动力学 / 静力学参数辨识仿真（Pinocchio）；开源 Adaptive Compliance Policy 训练复现与迁移分析  
+- 工具：Python / C++、控制系统仿真、Git；能用 AI 辅助加速工程落地，关键结论自行确认  
+
+---
+
+## 技术栈
+
+| 类别 | 内容 |
 | :--- | :--- |
-| 控制工程 | PID / LQR / MPC / 预设性能控制 / Carla |
-| 编程能力 | C++ / Python / HTML/CSS/JavaScript / 微信小程序 |
-| AI开发 | Vibe Coding / 扣子编程 / Cursor / 自动化工作流搭建 |
-| 工具链 | Git / GitHub Pages / 飞书自动化 / 微信小程序开发 |
+| 控制与机器人 | PID / LQR / MPC / 预设性能控制 / 容错控制；动力学·静力学参数辨识；重力补偿与力矩前馈基础 |
+| 建模与实现 | Pinocchio、URDF、MATLAB/Simulink；系统辨识；Python / C++ |
+| 学习与工程 | PyTorch 训练排障、Diffusion / 模仿学习接口理解；自动化工作流（Coze / 飞书） |
+| 前端与其他 | HTML/CSS/JS、微信小程序（拓展项目） |
 
 ---
 
-## 🚀 个人项目展示
+## 作品按含金量排序
 
-### 1. 科技行业资讯推送工作流
-[→ 查看项目详情](./projects/news-feed/README.md)
+> 排序依据：**岗位相关性（控制/机器人）→ 理论或算法深度 → 可验证产出（论文/仓库/可运行演示）**。  
+> 同层内按「硬核程度」排列。
 
-- **功能**：每日自动抓取AI/自动驾驶行业资讯，AI摘要后定时推送至飞书
-- **亮点**：解决行业资讯碎片化痛点，每日稳定推送3条关键资讯，持续更新行业动态
-- **技术**：Python + LangGraph + Coze + AI大模型
-- **成果**：已稳定运行，支持自定义推送时间与资讯来源
+### A. 科研（最高）
 
-### 2. LeetCode Hot100 刷题打卡
-[→ 查看源码](./projects/leetcode-tracker/) | [在线预览](https://txk1228.github.io/xiaoke-portfolio/projects/leetcode-tracker/)
+| 产出 | 说明 |
+| :--- | :--- |
+| **IEEE TIE（SCI）** | 块三角结构系统传感器故障下的容错预设性能控制，**已接收**（待正式发表） |
+| **EI × 2** | 欧拉–拉格朗日系统漏斗控制；含执行器故障的压气机预设性能控制 |
 
-- **功能**：LeetCode Hot100 题目打卡、进度追踪、数据持久化管理
-- **亮点**：2小时完成核心功能开发，实现刷题进度可视化与本地数据保存
-- **技术**：HTML/CSS/JavaScript + AI辅助开发
-- **成果**：内置100道 Hot100 题目，支持难度/分类/状态多维度筛选，有备注功能
-
-### 3. 体脂健康管家小程序
-[→ 查看项目详情](./projects/tizhi-health/README.md)
-
-- **功能**：体脂数据记录、趋势分析、智能减脂建议的微信小程序
-- **亮点**：实现截图自动识别录入数据、曲线可视化分析，打造轻量化健康追踪工具
-- **技术**：Taro + 微信小程序 + NestJS 服务端 + AI辅助开发
-- **演示**：![演示视频](./projects/tizhi-health/demo/demoyanshi.mp4)
-
-### 4. 在线电子黑板
-[→ 查看源码](./projects/whiteboard/) | [在线预览](https://txk1228.github.io/xiaoke-portfolio/projects/whiteboard/)
-
-- **功能**：支持画笔/橡皮/自定义粗细颜色/撤销/导出PNG的在线绘图工具
-- **亮点**：实现流畅 Canvas 绘图交互，支持撤销和快捷键，满足在线书写与标注需求
-- **技术**：HTML5 Canvas + Pointer Events + AI辅助开发
-- **成果**：可直接部署运行，高DPI屏幕清晰渲染
-
-### 5. 科技日报咨询智能体
-[→ 查看项目详情](./projects/consulting-agent/README.md)
-
-- **功能**：每日定时自动抓取AI/自动驾驶行业资讯并推送至飞书群，支持群内问答交互
-- **亮点**：内置定时触发器，部署即运行，无需手动开启工作流；Agent模式自主决策搜索+推送全流程
-- **技术**：Python + LangGraph Agent + APScheduler + 豆包大模型 + Coze
-- **成果**：每日 7:30 准时自动推送，已稳定运行
+论文与证明细节以正式出版物为准；本站侧重工程与开源作品展示。
 
 ---
 
-## 📬 联系方式
+### B. 机器人 / 控制算法（核心工程）
 
-- 邮箱：3238074253@qq.com
-- GitHub：[txk1228](https://github.com/txk1228)
-- 其他：doing
-  
+#### 1. 七自由度机械臂动力学 / 静力学参数辨识（仿真）
+
+[仓库 →](https://github.com/txk1228/arm-param-identification) · [简介](./projects/arm-param-id/README.md)
+
+- **内容**：\(τ=Yπ\) 回归建模；RNEA 数值重力回归 / JointTorqueRegressor；QR 基参数；OLS / Huber / 白化 WLS；傅里叶与 cosine 激励；轨迹碰撞回放  
+- **价值**：直接服务重力补偿与力矩前馈，与力控 / 位控岗位强相关  
+- **说明**：开源仓库为教学用 demo 臂仿真；不包含任何公司专有 URDF/CAD  
+
+#### 2. Adaptive Compliance Policy（开源）训练复现与迁移分析
+
+[仓库 →](https://github.com/txk1228/ACP-repo) · [简介](./projects/acp-repro/README.md)
+
+- **内容**：官方接触操控数据上复现 Diffusion Policy / ACP 训练链路；梳理「观测 → 策略 → 位姿/刚度设定 → 底层柔顺控制」  
+- **价值**：理解学习策略与传统力控接口的边界  
+- **边界**：未做真机部署；用于学习与迁移条件分析  
+
+---
+
+### C. 工程自动化与智能体（工具链）
+
+> `news-feed` 与 `consulting-agent` 同属「科技资讯自动抓取 + 摘要 + 飞书推送」族谱；下面按能力完整度列出。
+
+#### 3. 科技日报咨询智能体
+
+[详情 →](./projects/consulting-agent/README.md)
+
+- Agent 模式检索 + 定时推送飞书；覆盖 AI / 自动驾驶资讯  
+- 技术：Python · LangGraph · APScheduler · 大模型 · Coze  
+
+#### 4. 科技行业资讯推送工作流
+
+[详情 →](./projects/news-feed/README.md) · 相关仓库：[daily-news-bot](https://github.com/txk1228/daily-news-bot)
+
+- 低代码 / 工作流编排实现定时抓取、摘要与多渠道推送  
+
+#### 5. 体脂健康管家
+
+[详情 →](./projects/tizhi-health/README.md)
+
+- 截图识别录入、趋势分析与建议；Taro 小程序 + NestJS（拓展全栈能力）  
+
+---
+
+### D. 前端练习与工具站（展示用）
+
+#### 6. LeetCode Hot100 刷题打卡
+
+[源码](./projects/leetcode-tracker/) · [在线预览](https://txk1228.github.io/xiaoke-portfolio/projects/leetcode-tracker/)
+
+- 纯前端进度追踪与本地持久化  
+
+#### 7. 在线电子黑板
+
+[源码](./projects/whiteboard/) · [在线预览](https://txk1228.github.io/xiaoke-portfolio/projects/whiteboard/)
+
+- Canvas 画笔 / 橡皮 / 撤销 / 导出 PNG  
+
+---
+
+## 仓库索引
+
+| 仓库 | 角色 |
+| :--- | :--- |
+| [xiaoke-portfolio](https://github.com/txk1228/xiaoke-portfolio) | 本作品集（GitHub Pages） |
+| [arm-param-identification](https://github.com/txk1228/arm-param-identification) | 机械臂参数辨识仿真 |
+| [ACP-repo](https://github.com/txk1228/ACP-repo) | ACP / Diffusion Policy 复现笔记与脚本 |
+| [daily-news-bot](https://github.com/txk1228/daily-news-bot) | 资讯推送相关代码 |
+
+---
+
+## 联系方式
+
+- 邮箱：3238074253@qq.com  
+- GitHub：[txk1228](https://github.com/txk1228)  
