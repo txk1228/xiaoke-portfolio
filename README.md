@@ -32,11 +32,11 @@
 
 ### 一、科研成果（理论功底）
 
-| # | Paper | Venue |
-| :---: | :--- | :--- |
-| 1 | X. K. Tong, J. X. Zhang and T. Y. Chai, **"Fault-Tolerant Prescribed Performance Control of Block-Triangular Systems with Sensor Faults"** | *IEEE Transactions on Industrial Electronics* (SCI), **Published**, 2026 |
-| 2 | X. K. Tong, J. X. Zhang, **"Funnel Control of Euler-Lagrange Systems With Independent Control Gains"** | IAI, EI |
-| 3 | X. K. Tong, J. X. Zhang, **"Low-Complexity Prescribed Performance Control of Jet Engine Compressors With Actuator Failures"** | ICAIS & ISAS, EI |
+| # | Paper | Venue | 简介 |
+| :---: | :--- | :--- | :--- |
+| 1 | X. K. Tong, J. X. Zhang and T. Y. Chai, **"Fault-Tolerant Prescribed Performance Control of Block-Triangular Systems with Sensor Faults"** | *IEEE Transactions on Industrial Electronics* (SCI), **Published**, 2026 | 针对块三角结构非线性系统中的传感器故障，设计容错预设性能控制，在故障与不确定性下仍保证瞬态/稳态性能边界。 |
+| 2 | X. K. Tong, J. X. Zhang, **"Funnel Control of Euler-Lagrange Systems With Independent Control Gains"** | IAI, EI | 面向欧拉–拉格朗日系统提出漏斗控制方案，采用独立控制增益设计，保证跟踪误差始终落在预设漏斗内。 |
+| 3 | X. K. Tong, J. X. Zhang, **"Low-Complexity Prescribed Performance Control of Jet Engine Compressors With Actuator Failures"** | ICAIS & ISAS, EI | 针对喷气发动机压气机执行器故障场景，给出低复杂度预设性能控制，在降低实现难度的同时维持规定性能。 |
 
 > 依托非线性控制理论积累，聚焦机器人系统的高精度、高鲁棒性控制问题，支撑工程端的力控与辨识算法设计。
 
