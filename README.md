@@ -71,4 +71,5 @@
 
 - 邮箱：3238074253@qq.com
 - GitHub：[txk1228](https://github.com/txk1228)
-- 其他：健身！涨肌肉！！！
+- 其他：doing
+  
